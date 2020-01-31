@@ -19,6 +19,8 @@ def sumifs(request):
     all_df = pd.merge(left=tx_df, right=goods_df, how='left', on=['GoodsID','GoodsIDSeqNo'], sort=False)
 
     sumifs_df = all_df.groupby([all_df['GoodsID'], all_df['GoodsIDSeqNo']]).sum()
+    sumifs_df = sumifs_df.reset_index() # 그룹바이를 통해 행이 뭉쳐져서 인덱스를 구성하게 되면 열을 기반으로 인덱스를 리셋해준다.
+
     for index, row in sumifs_df.iterrows():
         Sumifs.objects.create(GoodsID=row['GoodsID'], GoodsIDSeqNo=row['GoodsIDSeqNo'], Quantity=row['Quantity'], GoodsPrice=row['GoodsPrice'])
 
